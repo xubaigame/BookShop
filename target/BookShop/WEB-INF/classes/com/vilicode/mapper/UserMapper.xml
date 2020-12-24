@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vilicode.mapper.UserMapper">
+    <select id="login" resultType="User" parameterType="String">
+    select u_id uid,u_name uname,u_pwd upwd,u_realname urealname,u_role urole,u_mark umark,
+    u_phone uphone,u_address uaddress
+    from `user` where u_name=#{value}
+    </select>
+    <select id="identify" resultType="int" parameterType="String">
+    select count(*) from `user` where u_name=#{value}
+    </select>
+    <select id="getUidByUname" resultType="int" parameterType="String">
+    select u_id from `user` where u_name=#{value}
+    </select>
+    <select id="queryUpwd" resultType="String" parameterType="int">
+    select u_pwd from `user` where u_id=#{value}
+    </select>
+    <insert id="addUser" parameterType="User">
+    insert into `user`(u_name,u_pwd,u_realname,u_role,u_mark,u_phone,u_address)
+    values(#{uname},#{upwd},#{urealname},#{urole},#{umark},#{uphone},#{uaddress})
+    </insert>
+    <update id="UpdatePhoneAndAddress">
+        update `user`
+        <set>
+            u_phone=#{1},
+            u_address=#{2}
+        </set>
+        <where>
+            u_id=#{0}
+        </where>
+    </update>
+    <update id="UpdatePassword" >
+        update `user`
+        <set>
+            u_pwd=#{1}
+        </set>
+        <where>
+            u_id=#{0}
+        </where>
+    </update>
+    <select id="queryUser" resultType="User" >
+    select u_id uid,u_name uname,u_pwd upwd,u_realname urealname,u_role urole,u_mark umark,
+    u_phone uphone,u_address uaddress from `user` limit #{0},#{1}
+    </select>
+    <select id="queryCountOfUser" resultType="int">
+    select count(*) from `user`
+    </select>
+    <delete id="deleteUser" parameterType="int">
+        delete from `user` where u_id = #{value}
+    </delete>
+    <select id="queryUserByUid" resultType="User" parameterType="int">
+    select u_id uid,u_name uname,u_pwd upwd,u_realname urealname,u_role urole,u_mark umark,
+    u_phone uphone,u_address uaddress
+    from `user` where u_id=#{value}
+    </select>
+</mapper>

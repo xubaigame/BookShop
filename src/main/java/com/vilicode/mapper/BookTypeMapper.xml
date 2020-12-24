@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vilicode.mapper.BookTypeMapper">
+    <select id="queryBookTypes" resultType="BookType">
+    select bt_id btid,bt_name btname from booktype order by bt_id;
+    </select>
+
+    <insert id="addBookType" parameterType="String">
+      insert into booktype(bt_name) values(#{value});
+    </insert>
+
+    <update id="updateBookType">
+    update BookType
+    <set>
+        bt_name=#{1}
+    </set>
+    <where>
+        bt_id=#{0}
+    </where>
+    </update>
+
+    <delete id="deleteBookType" parameterType="int">
+      delete from booktype where bt_id=#{value}
+    </delete>
+    <select id="queryBooksByBtid" resultType="Book">
+    select b_id bid,b_isbn bisbn,b_name bname,b_author bauthor,b_publisher bpublisher,
+    b_cover bcover,b_image1 bimage1,b_image2 bimage2,b_price bprice,b_stock bstock,b_mark bmark
+    from book where bt_id=#{0} limit #{1},#{2};
+    </select>
+    <select id="queryCountOfBooksByTypeID" resultType="int" parameterType="int">
+    select count(*) from book where bt_id=#{value};
+    </select>
+    <select id="queryBookTypeNameByBookTypeID" resultType="String" parameterType="int">
+    select bt_name from booktype where bt_id=#{value};
+    </select>
+    <select id="identifyBtname" resultType="int" parameterType="String">
+      select count(*) from booktype where bt_name=#{value}
+    </select>
+</mapper>

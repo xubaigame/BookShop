@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vilicode.mapper.OrderMapper">
+    <insert id="addOrder" parameterType="Order">
+      insert into `Order`(o_id,o_total,o_amount,o_status,o_paytype,u_id,o_realname,o_phone,o_address)
+      values(#{oid},#{ototal},#{oamount},#{ostatus},#{opaytype},#{uid},#{orealname},#{ophone},#{oaddress})
+    </insert>
+    <insert id="addOrderItem" parameterType="OrderItem">
+      insert into OrderItem(oi_price,oi_amount,b_id,o_id)
+      values(#{oiprice},#{oiamount},#{bid},#{oid})
+    </insert>
+    <delete id="deleteOrder" parameterType="String">
+      delete from `order` where o_id=#{value}
+    </delete>
+    <delete id="deleteOrderItem" parameterType="String">
+      delete from orderitem where o_id=#{value}
+    </delete>
+    <select id="queryOrderByUid" parameterType="int" resultType="Order">
+        select o_id oid,o_total ototal,o_amount oamount,o_status ostatus,o_paytype opaytype,u_id uid,
+        o_realname orealname,o_phone ophone,o_address oaddress,o_datetime odatetime from `order`
+        where u_id=#{value}
+    </select>
+    <select id="queryOrderItemByUidAndOid" resultType="OrderItem" parameterType="String">
+        select oi_id oiid,oi_price oiprice,oi_amount oiamount,b_id bid,o_id oid
+        from orderitem where o_id=#{0}
+    </select>
+    <select id="queryOrder" resultType="Order">
+        select o_id oid,o_total ototal,o_amount oamount,o_status ostatus,o_paytype opaytype,u_id uid,
+        o_realname orealname,o_phone ophone,o_address oaddress,o_datetime odatetime from `order`
+        limit #{0},#{1}
+    </select>
+    <select id="queryCountOfOrder" resultType="int">
+      select count(*) from `order`
+    </select>
+    <select id="queryOrderByOstatus" resultType="Order" parameterType="int">
+        select o_id oid,o_total ototal,o_amount oamount,o_status ostatus,o_paytype opaytype,u_id uid,
+        o_realname orealname,o_phone ophone,o_address oaddress,o_datetime odatetime from `order`
+        where o_status=#{0} limit #{1},#{2}
+    </select>
+    <select id="queryCountOfOrderByOstatus" resultType="int" parameterType="int">
+      select count(*) from `order` where o_status=#{value}
+    </select>
+    <update id="updateOrderStatus">
+        update `order`
+        <set>
+            o_status=#{1}
+        </set>
+        <where>
+           o_id=#{0}
+        </where>
+    </update>
+</mapper>

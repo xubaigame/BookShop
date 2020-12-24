@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/mvc
+http://www.springframework.org/schema/mvc/spring-mvc.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!-- 导入连接数据库的资源文件 -->
+    <context:property-placeholder location="classpath:com/vilicode/config/jdbc.properties"/>
+    <!-- 配置数据源 dbcp=database connection pool数据库连接池 -->
+    <bean   id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+    <!-- 配置SqlSessionFactoryBean,注入数据源和mybatis配置文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="configLocation" value="classpath:com/vilicode/config/mybatis-config.xml"></property>
+        <!-- 如果mybatis配置文件未扫描类的包，则在此处扫描，
+        如果mybatis未指定mapper接口的映射实现文件,则在此处配置，为了增加程序的可读性通常
+        在mybaits配置前两项 -->
+    </bean>
+    <!-- 通过MapperScannerConfigurer类自动完成基础包的扫描和Mapper接口的实现
+    自动关联sqlSessionFactory -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.vilicode.mapper"></property>
+    </bean>
+
+    <!-- 扫描service -->
+    <context:component-scan base-package="com.vilicode.service.impl"></context:component-scan>
+</beans>

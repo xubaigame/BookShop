@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vilicode.mapper.RecommendMapper">
+    <select id="queryBookByRecommendType" resultType="Book">
+    select t.bt_id btid,bt_name btname,b.b_id bid,b_isbn bisbn,b_name bname,b_author bauthor,b_publisher bpublisher,
+    b_cover bcover,b_image1 bimage1,b_image2 bimage2,b_price bprice,b_stock bstock,b_mark bmark from booktype t,book b,recommend r
+    where t.bt_id=b.bt_id and b.b_id=r.b_id and r_type=#{0} order by b.b_id limit #{1},#{2}
+    </select>
+    <select id="queryRecommendCountOfBooksByTypeID" resultType="int" parameterType="int">
+    select count(*) from recommend where r_type=#{0};
+    </select>
+    <select id="queryBookByRtypeAndBid" resultType="int">
+    select count(*) from recommend where r_type=#{0} and b_id =#{1};
+    </select>
+    <insert id="addRecommendBook">
+    insert into recommend(r_type,b_id) values(#{1},#{0});
+    </insert>
+
+
+    <delete id="removeRecommendBook">
+    delete from recommend where r_type=#{1} and b_id=#{0};
+    </delete>
+    <delete id="removeRecommend" parameterType="int">
+    delete from recommend where b_id=#{0};
+    </delete>
+</mapper>
